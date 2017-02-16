@@ -1,0 +1,35 @@
+{
+  "name": "schema-validator",
+  "version": "1.0.0",
+  "description": "Manages loading schemas from a single file or a directory and validation for checking data against those schemas.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "script/test",
+    "watch": "script/watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tests-always-included/xxxxxx.git"
+  },
+  "keywords": [
+    "schema",
+    "validate",
+    "validation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tests-always-included/xxxxxx/issues"
+  },
+  "homepage": "https://github.com/tests-always-included/xxxxxx#readme",
+  "devDependencies": {
+    "codecov": "~1.0.1",
+    "eslint": "~3.13.1",
+    "istanbul": "~0.4.5",
+    "jasmine": "~2.5.2"
+  },
+  "dependencies": {
+    "glob": "^7.1.0",
+    "tv4": "^1.2.7"
+  }
+}
