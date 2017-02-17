@@ -1,4 +1,4 @@
-Tool Name
+Schema Validator
 =========
 
 Manages loading schemas from a single file or a directory and validation for checking data against those schemas.

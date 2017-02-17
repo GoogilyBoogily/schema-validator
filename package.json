@@ -16,7 +16,13 @@
     "validate",
     "validation"
   ],
-  "author": "",
+  "author": "Derek Mayer",
+  "contributors": [
+      {
+        "name": "Derek Mayer",
+        "email": "mayerderekj@gmail.com"
+      }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/tests-always-included/xxxxxx/issues"
@@ -26,10 +32,13 @@
     "codecov": "~1.0.1",
     "eslint": "~3.13.1",
     "istanbul": "~0.4.5",
-    "jasmine": "~2.5.2"
+    "jasmine": "~2.5.3",
+    "jasmine-test-helpers": "~1.1.2"
   },
   "dependencies": {
+    "bluebird": "^3.4.7",
     "glob": "^7.1.0",
+    "mock-require": "^2.0.1",
     "tv4": "^1.2.7"
   }
 }
