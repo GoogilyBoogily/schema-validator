@@ -1,0 +1,44 @@
+{
+  "name": "schema-validator",
+  "version": "1.0.0",
+  "description": "Manages loading schemas from a single file or a directory and validation for checking data against those schemas.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "script/test",
+    "watch": "script/watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoogilyBoogily/schema-validator.git"
+  },
+  "keywords": [
+    "schema",
+    "validate",
+    "validation"
+  ],
+  "author": "Derek Mayer",
+  "contributors": [
+      {
+        "name": "Derek Mayer",
+        "email": "mayerderekj@gmail.com"
+      }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GoogilyBoogily/schema-validator/issues"
+  },
+  "homepage": "https://github.com/GoogilyBoogily/schema-validator#readme",
+  "devDependencies": {
+    "codecov": "~1.0.1",
+    "eslint": "~3.13.1",
+    "istanbul": "~0.4.5",
+    "jasmine": "~2.5.3",
+    "jasmine-test-helpers": "~1.1.2"
+  },
+  "dependencies": {
+    "bluebird": "^3.4.7",
+    "glob": "^7.1.0",
+    "mock-require": "^2.0.1",
+    "tv4": "^1.2.7"
+  }
+}
