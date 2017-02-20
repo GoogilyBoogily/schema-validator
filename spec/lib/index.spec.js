@@ -1,19 +1,19 @@
 "use strict";
 
 describe("schema", () => {
-    var globMock, path, promiseMock, SchemaValidator, schemaValidatorInstance;
+    var mock, path, promiseMock, SchemaValidator, schemaValidatorInstance;
 
     beforeEach(() => {
         var fs, tv4;
 
         fs = require("fs");
+        mock = require("mock-require");
         path = require("path");
-        spyOn(path, "resolve").andCallThrough();
-        globMock = jasmine.createSpy("globMock");
+        spyOn(path, "resolve").and.callThrough();
         promiseMock = require("../mock/promise-mock")();
         tv4 = require("tv4");
-        spyOn(tv4, "addSchema").andCallThrough();
-        spyOn(fs, "readFile").andCallFake((fn, callback) => {
+        spyOn(tv4, "addSchema").and.callThrough();
+        spyOn(fs, "readFile").and.callFake((fn, callback) => {
             /**
              * Signify the end of the loading of a file.  If passed a string,
              * uses that string as a buffer.  If passed an object, first it
@@ -72,9 +72,74 @@ describe("schema", () => {
 
             callback(new Error(`Invalid file: ${fn.toString()}`));
         });
+        mock("glob", (pattern, options) => {
+            expect(pattern).toBe("./folder/**/*.json");
+            expect(options).toEqual({
+                strict: true,
+                nodir: true
+            });
 
-        SchemaValidator = require("../..")();
+            return promiseMock.resolve([
+                "/folder/email.json",
+                "/folder/folder/number.json"
+            ]);
+        });
+        SchemaValidator = require("../..");
         schemaValidatorInstance = new SchemaValidator();
+    });
+    describe(".addFormat()", () => {
+        it("correctly adds schema to tv4's schema cache", () => {
+            var testSchema;
+
+            testSchema = {
+                type: "string",
+                format: "testFormat"
+            };
+
+            schemaValidatorInstance.addFormat("testFormat", (data) => {
+                if (data === "testData") {
+                    return true;
+                }
+
+                return "Incorrect test data";
+            });
+
+            expect(schemaValidatorInstance.tv4.validate("testData", testSchema)).toBe(true);
+            expect(schemaValidatorInstance.tv4.validate("notTestData", testSchema)).toBe(false);
+        });
+    });
+    describe(".defineError()", () => {
+        it("correctly adds a custom error to tv4's errorCodes property", () => {
+            schemaValidatorInstance.defineError("MY_CUSTOM_ERROR", 10001, "Incorrect moon (expected {expected}, got {actual}");
+            expect(schemaValidatorInstance.tv4.errorCodes.MY_CUSTOM_ERROR).toBe(10001);
+        });
+    });
+    describe(".defineKeyword()", () => {
+        it("correctly adds a custom keyword validator", () => {
+            var customKeywordValue, customKeywordValueTwo, invalidCustomKeywordText, testData, testDataTwo;
+
+            customKeywordValue = "Custom keyword value.";
+            customKeywordValueTwo = "Wrong custom keyword value.";
+            invalidCustomKeywordText = "Invalid custom keyword value.";
+            testData = {
+                myCustomKeyword: customKeywordValue
+            };
+            testDataTwo = {
+                myCustomKeyword: customKeywordValueTwo
+            };
+            schemaValidatorInstance.defineKeyword("myCustomKeyword", (data, value) => {
+                if (value === data.myCustomKeyword) {
+                    return null;
+                }
+
+                return invalidCustomKeywordText;
+            });
+            schemaValidatorInstance.tv4.addSchema("/", {
+                myCustomKeyword: customKeywordValue
+            });
+            expect(schemaValidatorInstance.tv4.validate(testData, "/")).toBe(true);
+            expect(schemaValidatorInstance.tv4.validate(testDataTwo, "/")).toBe(false);
+        });
     });
     describe(".getMissingSchemas()", () => {
         it("reports on missing schemas", () => {
@@ -93,11 +158,6 @@ describe("schema", () => {
                 }).not.toThrow();
             });
         });
-        it("rejects the promise when a schema has the wrong ID", () => {
-            return schemaValidatorInstance.loadSchemaAsync("./a/b/c/d/number.json", "./").then(jasmine.fail, (err) => {
-                expect(err.toString()).toContain("Schema had wrong ID");
-            });
-        });
         it("loads a schema which cannot be parsed", () => {
             return schemaValidatorInstance.loadSchemaAsync("./email-parse-error.json", "./").then(jasmine.fail, (err) => {
                 expect(err.toString()).toContain("Unable to parse file: ./email-parse-error.json");
@@ -111,20 +171,8 @@ describe("schema", () => {
     });
     describe(".loadSchemaFolderAsync()", () => {
         it("loads schemas in folder and validates against them", () => {
-            path.resolve.andCallFake((a, b) => {
+            path.resolve.and.callFake((a, b) => {
                 return a + b;
-            });
-            globMock.andCallFake((pattern, options) => {
-                expect(pattern).toBe("./folder/**/*.json");
-                expect(options).toEqual({
-                    strict: true,
-                    nodir: true
-                });
-
-                return promiseMock.resolve([
-                    "/folder/email.json",
-                    "/folder/folder/number.json"
-                ]);
             });
 
             return schemaValidatorInstance.loadSchemaFolderAsync("./folder/").then(() => {
@@ -142,20 +190,29 @@ describe("schema", () => {
         });
     });
     describe(".validate()", () => {
-        it("loads a schema and validates against it", () => {
+        it("loads a schema and passes validation", () => {
             return schemaValidatorInstance.loadSchemaAsync("./email.json", "./").then(() => {
                 var result;
 
-                expect(schemaValidatorInstance.validate("someone@example.net", "/email.json")).toBe(null);
-                result = schemaValidatorInstance.validate("someone", "/email.json");
+                expect(() => {
+                    result = schemaValidatorInstance.validate("someone@example.net", "/email.json");
+                }).not.toThrow();
+                expect(result).toBe(null);
+            });
+        });
+        it("loads a schema and fails validation", () => {
+            return schemaValidatorInstance.loadSchemaAsync("./email.json", "./").then(() => {
+                var result;
+
+                result = schemaValidatorInstance.validate(5, "/email.json");
+                expect(result).not.toBe(null);
                 expect(result).toEqual(jasmine.any(Object));
-                expect(result.valid).toBe(false);
             });
         });
         it("tries to validate against a non-present schema", () => {
             expect(() => {
                 schemaValidatorInstance.validate("something", "notThere");
-            }).toThrow("Schema is not loaded: notThere");
+            }).toThrowError("Schema is not loaded: notThere");
         });
     });
 });

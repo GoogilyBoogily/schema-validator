@@ -1,5 +1,5 @@
-Tool Name
-=========
+Schema Validator
+================
 
 Manages loading schemas from a single file or a directory and validation for checking data against those schemas.
 
@@ -10,10 +10,10 @@ Manages loading schemas from a single file or a directory and validation for che
 [![codecov.io][codecov-badge]][codecov-link]
 
 
-Overview Things
----------------
+Overview
+--------
 
-Sample usage and why it's beneficial
+Simplifies the process of adding all schemas from a folder or a single file. This [tv4][https://www.npmjs.com/package/tv4] module as the underlying schema validator. Because of this, some of tv4's functions are exposed.
 
 
 Installation
@@ -21,7 +21,7 @@ Installation
 
 Use `npm` to install this package easily.
 
-    $ npm install --save xxxxxx
+    $ npm install --save schema-validator
 
 Alternately you may edit your `package.json` and add this to your `dependencies` object:
 
@@ -29,17 +29,74 @@ Alternately you may edit your `package.json` and add this to your `dependencies`
         ...
         "dependencies": {
             ...
-            "xxxxxx": "*"
+            "schema-validator": "*"
             ...
         }
         ...
     }
 
 
-More Stuff
-----------
+API
+---
 
-Could include project goals, examples, reasoning, API overview, methods, etc.
+### addFormat(format, validationFunction)
+
+Add a custom format validator. This is an exposed tv4 function.
+
+- `format` is a string, corresponding to the "format" value in schemas.
+- `validationFunction` is a function that either returns:
+    - `null` (meaning no error)
+    - An error string (explaining the reason for failure)
+
+
+### defineError(codeName, codeNumber, defaultMessage)
+
+Defines a custom error code. This is an exposed tv4 function.
+
+- `codeName` is a string, all-caps underscore separated, e.g. `"MY_CUSTOM_ERROR"`
+- `codeNumber` is an integer > 10000, which will be stored in `tv4.errorCodes` (e.g. `tv4.errorCodes.MY_CUSTOM_ERROR`)
+- `defaultMessage` is an error message template to use (assuming translations have not been provided for this code)
+
+
+### defineKeyword(keyword, validationFunction)
+
+Add a custom keyword validator. This is an exposed tv4 function.
+
+- `keyword` is a string, corresponding to a schema keyword.
+- `validationFunction` is a function that either returns:
+    - `null` (meaning no error).
+    - An error string (explaining the reason for failure).
+    - An error object (containing some of: `code`/`message`/`dataPath`/`schemaPath`).
+
+
+### getMissingSchemas(filter)
+
+Return an Array with schema document URIs that are used as `$ref` in known schemas but which currently have no associated schema data.
+
+- `filter` optional RegExp to filter URIs.
+
+
+### loadSchemaAsync(schemaPath, relativeTo)
+
+Loads a schema from a file and add it to the list of schemas available for validation. Returns an empty promise when it has finished loading the schema.
+
+- `schemaPath` is the path to the desired schema on the filesystem.
+- `relativeTo` is the path on the filesystem that `schemaPath` is relative to.
+
+
+### loadSchemaFolderAsync(startPath)
+
+Loads a directory of schemas and adds them to the list of schemas available for validation. Returns an empty promise when it has finished loading the schemas in the folder.
+
+- `startPath` is the folder containing the schemas that will be loaded.
+
+
+### validate(data, schema)
+
+Validates data against an available schema. If the schema isn't mapped this will throw an error. If there is no error, this will return `null`.
+
+- `data` is the JSON data to validate.
+- `schema` is the schema uri to validate `data` against.
 
 
 License
