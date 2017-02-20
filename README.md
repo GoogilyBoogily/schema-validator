@@ -13,7 +13,7 @@ Manages loading schemas from a single file or a directory and validation for che
 Overview
 --------
 
-Simplifies the process of adding all schemas from a folder or a single file. This [tv4][https://www.npmjs.com/package/tv4] module as the underlying schema validator. Because of this, some of tv4's functions are exposed.
+Simplifies the process of adding all schemas from a folder or a single file. This [tv4](https://www.npmjs.com/package/tv4) module as the underlying schema validator. Because of this, some of tv4's functions are exposed.
 
 
 Installation

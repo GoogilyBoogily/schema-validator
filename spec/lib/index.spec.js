@@ -1,16 +1,16 @@
 "use strict";
 
 describe("schema", () => {
-    var mock, path, promiseMock, SchemaValidator, schemaValidatorInstance;
+    var Bluebird, mock, path, SchemaValidator, schemaValidatorInstance;
 
     beforeEach(() => {
         var fs, tv4;
 
+        Bluebird = require("bluebird");
         fs = require("fs");
         mock = require("mock-require");
         path = require("path");
         spyOn(path, "resolve").and.callThrough();
-        promiseMock = require("../mock/promise-mock")();
         tv4 = require("tv4");
         spyOn(tv4, "addSchema").and.callThrough();
         spyOn(fs, "readFile").and.callFake((fn, callback) => {
@@ -79,7 +79,7 @@ describe("schema", () => {
                 nodir: true
             });
 
-            return promiseMock.resolve([
+            return Bluebird.resolve([
                 "/folder/email.json",
                 "/folder/folder/number.json"
             ]);
