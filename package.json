@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tests-always-included/xxxxxx.git"
+    "url": "git+https://github.com/GoogilyBoogily/schema-validator.git"
   },
   "keywords": [
     "schema",
@@ -25,9 +25,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tests-always-included/xxxxxx/issues"
+    "url": "https://github.com/GoogilyBoogily/schema-validator/issues"
   },
-  "homepage": "https://github.com/tests-always-included/xxxxxx#readme",
+  "homepage": "https://github.com/GoogilyBoogily/schema-validator#readme",
   "devDependencies": {
     "codecov": "~1.0.1",
     "eslint": "~3.13.1",
