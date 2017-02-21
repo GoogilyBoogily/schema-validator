@@ -1,7 +1,7 @@
 {
-    "name": "schema-validator",
+    "name": "tv4-file-loader",
     "version": "1.0.0",
-    "description": "Manages loading schemas from a single file or a directory and validation for checking data against those schemas.",
+    "description": "Adds loading schemas from a single file or a directory functionality to the tv4 schema validator.",
     "main": "lib/index.js",
     "scripts": {
         "test": "script/test",
@@ -12,9 +12,13 @@
         "url": "git+https://github.com/GoogilyBoogily/schema-validator.git"
     },
     "keywords": [
+        "tv4",
         "schema",
         "validate",
-        "validation"
+        "validation",
+        "load",
+        "loading",
+        "loader"
     ],
     "author": "Derek Mayer",
     "contributors": [
@@ -38,7 +42,6 @@
     "dependencies": {
         "bluebird": "^3.4.7",
         "glob": "^7.1.0",
-        "mock-require": "^2.0.1",
-        "tv4": "^1.2.7"
+        "mock-require": "^2.0.1"
     }
 }
