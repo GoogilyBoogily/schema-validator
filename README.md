@@ -91,4 +91,3 @@ This software is licensed under a [MIT license][LICENSE] that contains additiona
 [travis-badge]: https://img.shields.io/travis/connected-world-services/tv4-file-loader/master.svg
 [travis-link]: http://travis-ci.org/connected-world-services/tv4-file-loader
 
-https://github.com/connected-world-services/tv4-file-loader
