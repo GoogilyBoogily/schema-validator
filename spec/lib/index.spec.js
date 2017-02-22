@@ -1,8 +1,7 @@
 "use strict";
 
 describe("schema", () => {
-    // eslint-disable-next-line no-unused-vars
-    var Bluebird, mock, path, tv4, tv4FileLoader;
+    var Bluebird, mock, path, tv4;
 
     beforeEach(() => {
         var fs;
@@ -85,7 +84,7 @@ describe("schema", () => {
                 "/folder/folder/number.json"
             ]);
         });
-        tv4FileLoader = mock.reRequire("../..")(tv4);
+        mock.reRequire("../..")(tv4);
     });
     it("correctly attaches the functions", () => {
         expect(tv4.loadSchemaFileAsync).toEqual(jasmine.any(Function));
