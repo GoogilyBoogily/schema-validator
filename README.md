@@ -79,15 +79,16 @@ License
 This software is licensed under a [MIT license][LICENSE] that contains additional non-advertising and patent-related clauses. [Read full license terms][LICENSE]
 
 
-[codecov-badge]: https://img.shields.io/codecov/c/github/tests-always-included/xxxxxx/master.svg
-[codecov-link]: https://codecov.io/github/tests-always-included/xxxxxx?branch=master
-[dependencies-badge]: https://img.shields.io/david/tests-always-included/xxxxxx.svg
-[dependencies-link]: https://david-dm.org/tests-always-included/xxxxxx
-[devdependencies-badge]: https://img.shields.io/david/dev/tests-always-included/xxxxxx.svg
-[devdependencies-link]: https://david-dm.org/tests-always-included/xxxxxx#info=devDependencies
+[codecov-badge]: https://img.shields.io/codecov/c/github/connected-world-services/tv4-file-loader/master.svg
+[codecov-link]: https://codecov.io/github/connected-world-services/tv4-file-loader?branch=master
+[dependencies-badge]: https://img.shields.io/david/connected-world-services/tv4-file-loader.svg
+[dependencies-link]: https://david-dm.org/connected-world-services/tv4-file-loader
+[devdependencies-badge]: https://img.shields.io/david/dev/connected-world-services/tv4-file-loader.svg
+[devdependencies-link]: https://david-dm.org/connected-world-services/tv4-file-loader#info=devDependencies
 [LICENSE]: LICENSE.md
-[npm-badge]: https://img.shields.io/npm/v/xxxxxx.svg
-[npm-link]: https://npmjs.org/package/xxxxxx
-[travis-badge]: https://img.shields.io/travis/tests-always-included/xxxxxx/master.svg
-[travis-link]: http://travis-ci.org/tests-always-included/xxxxxx
+[npm-badge]: https://img.shields.io/npm/v/tv4-file-loader.svg
+[npm-link]: https://npmjs.org/package/tv4-file-loader
+[travis-badge]: https://img.shields.io/travis/connected-world-services/tv4-file-loader/master.svg
+[travis-link]: http://travis-ci.org/connected-world-services/tv4-file-loader
 
+https://github.com/connected-world-services/tv4-file-loader

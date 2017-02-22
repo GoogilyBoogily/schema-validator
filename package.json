@@ -9,7 +9,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/GoogilyBoogily/schema-validator.git"
+        "url": "git+https://github.com/connected-world-services/tv4-file-loader.git"
     },
     "keywords": [
         "tv4",
@@ -29,9 +29,9 @@
     ],
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/GoogilyBoogily/schema-validator/issues"
+        "url": "https://github.com/connected-world-services/tv4-file-loader/issues"
     },
-    "homepage": "https://github.com/GoogilyBoogily/schema-validator#readme",
+    "homepage": "https://github.com/connected-world-services/tv4-file-loader#readme",
     "devDependencies": {
         "codecov": "~1.0.1",
         "eslint": "~3.13.1",
