@@ -63,9 +63,9 @@ First, require tv4.
 
     tv4 = require("tv4");
 
-Then, require the tv4-file-loader module and pass the newly created tv4 into it.
+Then, require the tv4-file-loader module and pass the newly created tv4 into it. The `tv4-file-loader` factory returns the `tv4` instance for convenience.
 
-    require("tv4-file-loader")(tv4);
+    tv4 = require("tv4-file-loader")(tv4);
 
 Voila! Now you have the `loadSchemaFileAsync()` and `loadSchemaFolderAsync()` functions available to you through tv4. You can use them like so:
 

@@ -1,6 +1,6 @@
 {
     "name": "tv4-file-loader",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Adds loading schemas from a single file or a directory functionality to the tv4 schema validator.",
     "main": "lib/index.js",
     "scripts": {
