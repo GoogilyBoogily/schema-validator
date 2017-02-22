@@ -63,7 +63,7 @@ First, require tv4.
 
     tv4 = require("tv4");
 
-Then, require the tv4-file-loader module, pass the newly created tv4 into it, and set the original tv4 to the modified one.
+Then, require the tv4-file-loader module and pass the newly created tv4 into it. The `tv4-file-loader` factory returns the `tv4` instance for convenience.
 
     tv4 = require("tv4-file-loader")(tv4);
 
