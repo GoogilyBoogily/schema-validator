@@ -1,10 +1,10 @@
 "use strict";
 
 describe("schema", () => {
-    var Bluebird, mock, path, SchemaValidator, schemaValidatorInstance;
+    var Bluebird, mock, path, tv4;
 
     beforeEach(() => {
-        var fs, tv4;
+        var fs;
 
         Bluebird = require("bluebird");
         fs = require("fs");
@@ -84,87 +84,25 @@ describe("schema", () => {
                 "/folder/folder/number.json"
             ]);
         });
-        SchemaValidator = require("../..");
-        schemaValidatorInstance = new SchemaValidator();
+        mock.reRequire("../..")(tv4);
     });
-    describe(".addFormat()", () => {
-        it("correctly adds schema to tv4's schema cache", () => {
-            var testSchema;
-
-            testSchema = {
-                type: "string",
-                format: "testFormat"
-            };
-
-            schemaValidatorInstance.addFormat("testFormat", (data) => {
-                if (data === "testData") {
-                    return true;
-                }
-
-                return "Incorrect test data";
-            });
-
-            expect(schemaValidatorInstance.tv4.validate("testData", testSchema)).toBe(true);
-            expect(schemaValidatorInstance.tv4.validate("notTestData", testSchema)).toBe(false);
-        });
+    it("correctly attaches the functions", () => {
+        expect(tv4.loadSchemaFileAsync).toEqual(jasmine.any(Function));
+        expect(tv4.loadSchemaFolderAsync).toEqual(jasmine.any(Function));
     });
-    describe(".defineError()", () => {
-        it("correctly adds a custom error to tv4's errorCodes property", () => {
-            schemaValidatorInstance.defineError("MY_CUSTOM_ERROR", 10001, "Incorrect moon (expected {expected}, got {actual}");
-            expect(schemaValidatorInstance.tv4.errorCodes.MY_CUSTOM_ERROR).toBe(10001);
-        });
-    });
-    describe(".defineKeyword()", () => {
-        it("correctly adds a custom keyword validator", () => {
-            var customKeywordValue, customKeywordValueTwo, invalidCustomKeywordText, testData, testDataTwo;
-
-            customKeywordValue = "Custom keyword value.";
-            customKeywordValueTwo = "Wrong custom keyword value.";
-            invalidCustomKeywordText = "Invalid custom keyword value.";
-            testData = {
-                myCustomKeyword: customKeywordValue
-            };
-            testDataTwo = {
-                myCustomKeyword: customKeywordValueTwo
-            };
-            schemaValidatorInstance.defineKeyword("myCustomKeyword", (data, value) => {
-                if (value === data.myCustomKeyword) {
-                    return null;
-                }
-
-                return invalidCustomKeywordText;
-            });
-            schemaValidatorInstance.tv4.addSchema("/", {
-                myCustomKeyword: customKeywordValue
-            });
-            expect(schemaValidatorInstance.tv4.validate(testData, "/")).toBe(true);
-            expect(schemaValidatorInstance.tv4.validate(testDataTwo, "/")).toBe(false);
-        });
-    });
-    describe(".getMissingSchemas()", () => {
-        it("reports on missing schemas", () => {
-            return schemaValidatorInstance.loadSchemaAsync("./missing-one.json", "./").then(() => {
-                expect(schemaValidatorInstance.getMissingSchemas()).toEqual([
-                    "/other-schema"
-                ]);
-            });
-        });
-    });
-    describe(".loadSchemaAsync()", () => {
+    describe(".loadSchemaFileAsync()", () => {
         it("loads a schema with an ID and validates against it", () => {
-            return schemaValidatorInstance.loadSchemaAsync("./email.json", "./").then(() => {
-                expect(() => {
-                    schemaValidatorInstance.validate("someone@example.net", "/email.json");
-                }).not.toThrow();
+            return tv4.loadSchemaFileAsync("./email.json", "./").then(() => {
+                expect(tv4.validate("someone@example.net", "/email.json")).toBe(true);
             });
         });
         it("loads a schema which cannot be parsed", () => {
-            return schemaValidatorInstance.loadSchemaAsync("./email-parse-error.json", "./").then(jasmine.fail, (err) => {
+            return tv4.loadSchemaFileAsync("./email-parse-error.json", "./").then(jasmine.fail, (err) => {
                 expect(err.toString()).toContain("Unable to parse file: ./email-parse-error.json");
             });
         });
         it("tries to load a schema which is not present", () => {
-            return schemaValidatorInstance.loadSchemaAsync("./email-not-there.json", "./").then(jasmine.fail, (err) => {
+            return tv4.loadSchemaFileAsync("./email-not-there.json", "./").then(jasmine.fail, (err) => {
                 expect(err.toString()).toContain("Unable to parse file: ./email-not-there.json");
             });
         });
@@ -175,44 +113,10 @@ describe("schema", () => {
                 return a + b;
             });
 
-            return schemaValidatorInstance.loadSchemaFolderAsync("./folder/").then(() => {
-                var result;
-
-                expect(() => {
-                    result = schemaValidatorInstance.validate("someone@example.net", "/folder/email.json");
-                }).not.toThrow();
-                expect(result).toBe(null);
-                expect(() => {
-                    result = schemaValidatorInstance.validate(5, "/folder/folder/number.json");
-                }).not.toThrow();
-                expect(result).toBe(null);
+            return tv4.loadSchemaFolderAsync("./folder/").then(() => {
+                expect(tv4.validate("someone@example.net", "/folder/email.json")).toBe(true);
+                expect(tv4.validate(5, "/folder/folder/number.json")).toBe(true);
             });
-        });
-    });
-    describe(".validate()", () => {
-        it("loads a schema and passes validation", () => {
-            return schemaValidatorInstance.loadSchemaAsync("./email.json", "./").then(() => {
-                var result;
-
-                expect(() => {
-                    result = schemaValidatorInstance.validate("someone@example.net", "/email.json");
-                }).not.toThrow();
-                expect(result).toBe(null);
-            });
-        });
-        it("loads a schema and fails validation", () => {
-            return schemaValidatorInstance.loadSchemaAsync("./email.json", "./").then(() => {
-                var result;
-
-                result = schemaValidatorInstance.validate(5, "/email.json");
-                expect(result).not.toBe(null);
-                expect(result).toEqual(jasmine.any(Object));
-            });
-        });
-        it("tries to validate against a non-present schema", () => {
-            expect(() => {
-                schemaValidatorInstance.validate("something", "notThere");
-            }).toThrowError("Schema is not loaded: notThere");
         });
     });
 });

@@ -1,7 +1,7 @@
-Schema Validator
-================
+tv4 File Loader
+===============
 
-Manages loading schemas from a single file or a directory and validation for checking data against those schemas.
+Adds loading schemas from a single file or a directory functionality to the [tv4](https://www.npmjs.com/package/tv4) schema validator.
 
 [![npm version][npm-badge]][npm-link]
 [![Build Status][travis-badge]][travis-link]
@@ -13,7 +13,7 @@ Manages loading schemas from a single file or a directory and validation for che
 Overview
 --------
 
-Simplifies the process of adding all schemas from a folder or a single file. This [tv4](https://www.npmjs.com/package/tv4) module as the underlying schema validator. Because of this, some of tv4's functions are exposed.
+Simplifies the process of adding all schemas from a folder or a single file by attaching the `loadSchemaFileAsync()` and `loadSchemaFolderAsync` functions to [tv4](https://www.npmjs.com/package/tv4).
 
 
 Installation
@@ -21,7 +21,7 @@ Installation
 
 Use `npm` to install this package easily.
 
-    $ npm install --save schema-validator
+    $ npm install --save tv4-file-loader
 
 Alternately you may edit your `package.json` and add this to your `dependencies` object:
 
@@ -29,91 +29,65 @@ Alternately you may edit your `package.json` and add this to your `dependencies`
         ...
         "dependencies": {
             ...
-            "schema-validator": "*"
+            "tv4-file-loader": "*"
             ...
         }
         ...
     }
 
 
-API
----
+Functions attached to tv4
+-------------------------
 
-### addFormat(format, validationFunction)
+### `loadSchemaFileAsync(schemaPath, relativeTo)`
 
-Add a custom format validator. This is an exposed tv4 function.
-
-- `format` is a string, corresponding to the "format" value in schemas.
-- `validationFunction` is a function that either returns:
-    - `null` (meaning no error)
-    - An error string (explaining the reason for failure)
-
-
-### defineError(codeName, codeNumber, defaultMessage)
-
-Defines a custom error code. This is an exposed tv4 function.
-
-- `codeName` is a string, all-caps underscore separated, e.g. `"MY_CUSTOM_ERROR"`
-- `codeNumber` is an integer > 10000, which will be stored in `tv4.errorCodes` (e.g. `tv4.errorCodes.MY_CUSTOM_ERROR`)
-- `defaultMessage` is an error message template to use (assuming translations have not been provided for this code)
-
-
-### defineKeyword(keyword, validationFunction)
-
-Add a custom keyword validator. This is an exposed tv4 function.
-
-- `keyword` is a string, corresponding to a schema keyword.
-- `validationFunction` is a function that either returns:
-    - `null` (meaning no error).
-    - An error string (explaining the reason for failure).
-    - An error object (containing some of: `code`/`message`/`dataPath`/`schemaPath`).
-
-
-### getMissingSchemas(filter)
-
-Return an Array with schema document URIs that are used as `$ref` in known schemas but which currently have no associated schema data.
-
-- `filter` optional RegExp to filter URIs.
-
-
-### loadSchemaAsync(schemaPath, relativeTo)
-
-Loads a schema from a file and add it to the list of schemas available for validation. Returns an empty promise when it has finished loading the schema.
+Loads a schema from a file. Returns an empty promise when it has finished loading the schema.
 
 - `schemaPath` is the path to the desired schema on the filesystem.
 - `relativeTo` is the path on the filesystem that `schemaPath` is relative to.
 
 
-### loadSchemaFolderAsync(startPath)
+### `loadSchemaFolderAsync(startPath)`
 
-Loads a directory of schemas and adds them to the list of schemas available for validation. Returns an empty promise when it has finished loading the schemas in the folder.
+Loads a directory of schemas. Returns an empty promise when it has finished loading the schemas in the folder.
 
 - `startPath` is the folder containing the schemas that will be loaded.
 
 
-### validate(data, schema)
+Usage
+-----
 
-Validates data against an available schema. If the schema isn't mapped this will throw an error. If there is no error, this will return `null`.
+First, require tv4.
 
-- `data` is the JSON data to validate.
-- `schema` is the schema uri to validate `data` against.
+    var tv4;
+
+    tv4 = require("tv4");
+
+Then, require the tv4-file-loader module and pass the newly created tv4 into it.
+
+    require("tv4-file-loader")(tv4);
+
+Voila! Now you have the `loadSchemaFileAsync()` and `loadSchemaFolderAsync()` functions available to you through tv4. You can use them like so:
+
+    tv4.loadSchemaFileAsync("./schemas/example-schema.json", ".");
+    tv4.loadSchemaFolderAsync("./anotherSchemaFolder/");
 
 
 License
 -------
 
-This software is licensed under a [MIT license][LICENSE] that contains additional non-advertising and patent-related clauses.  [Read full license terms][LICENSE]
+This software is licensed under a [MIT license][LICENSE] that contains additional non-advertising and patent-related clauses. [Read full license terms][LICENSE]
 
 
-[codecov-badge]: https://img.shields.io/codecov/c/github/tests-always-included/xxxxxx/master.svg
-[codecov-link]: https://codecov.io/github/tests-always-included/xxxxxx?branch=master
-[dependencies-badge]: https://img.shields.io/david/tests-always-included/xxxxxx.svg
-[dependencies-link]: https://david-dm.org/tests-always-included/xxxxxx
-[devdependencies-badge]: https://img.shields.io/david/dev/tests-always-included/xxxxxx.svg
-[devdependencies-link]: https://david-dm.org/tests-always-included/xxxxxx#info=devDependencies
+[codecov-badge]: https://img.shields.io/codecov/c/github/connected-world-services/tv4-file-loader/master.svg
+[codecov-link]: https://codecov.io/github/connected-world-services/tv4-file-loader?branch=master
+[dependencies-badge]: https://img.shields.io/david/connected-world-services/tv4-file-loader.svg
+[dependencies-link]: https://david-dm.org/connected-world-services/tv4-file-loader
+[devdependencies-badge]: https://img.shields.io/david/dev/connected-world-services/tv4-file-loader.svg
+[devdependencies-link]: https://david-dm.org/connected-world-services/tv4-file-loader#info=devDependencies
 [LICENSE]: LICENSE.md
-[npm-badge]: https://img.shields.io/npm/v/xxxxxx.svg
-[npm-link]: https://npmjs.org/package/xxxxxx
-[travis-badge]: https://img.shields.io/travis/tests-always-included/xxxxxx/master.svg
-[travis-link]: http://travis-ci.org/tests-always-included/xxxxxx
+[npm-badge]: https://img.shields.io/npm/v/tv4-file-loader.svg
+[npm-link]: https://npmjs.org/package/tv4-file-loader
+[travis-badge]: https://img.shields.io/travis/connected-world-services/tv4-file-loader/master.svg
+[travis-link]: http://travis-ci.org/connected-world-services/tv4-file-loader
 

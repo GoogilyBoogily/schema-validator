@@ -1,7 +1,7 @@
 {
-    "name": "schema-validator",
+    "name": "tv4-file-loader",
     "version": "1.0.0",
-    "description": "Manages loading schemas from a single file or a directory and validation for checking data against those schemas.",
+    "description": "Adds loading schemas from a single file or a directory functionality to the tv4 schema validator.",
     "main": "lib/index.js",
     "scripts": {
         "test": "script/test",
@@ -9,12 +9,16 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/GoogilyBoogily/schema-validator.git"
+        "url": "git+https://github.com/connected-world-services/tv4-file-loader.git"
     },
     "keywords": [
+        "tv4",
         "schema",
         "validate",
-        "validation"
+        "validation",
+        "load",
+        "loading",
+        "loader"
     ],
     "author": "Derek Mayer",
     "contributors": [
@@ -25,20 +29,20 @@
     ],
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/GoogilyBoogily/schema-validator/issues"
+        "url": "https://github.com/connected-world-services/tv4-file-loader/issues"
     },
-    "homepage": "https://github.com/GoogilyBoogily/schema-validator#readme",
+    "homepage": "https://github.com/connected-world-services/tv4-file-loader#readme",
     "devDependencies": {
         "codecov": "~1.0.1",
         "eslint": "~3.13.1",
         "istanbul": "~0.4.5",
         "jasmine": "~2.5.3",
-        "jasmine-test-helpers": "~1.1.2"
+        "jasmine-test-helpers": "~1.1.2",
+        "tv4": "^1.2.7"
     },
     "dependencies": {
         "bluebird": "^3.4.7",
         "glob": "^7.1.0",
-        "mock-require": "^2.0.1",
-        "tv4": "^1.2.7"
+        "mock-require": "^2.0.1"
     }
 }
