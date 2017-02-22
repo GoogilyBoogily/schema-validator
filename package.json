@@ -37,7 +37,8 @@
         "eslint": "~3.13.1",
         "istanbul": "~0.4.5",
         "jasmine": "~2.5.3",
-        "jasmine-test-helpers": "~1.1.2"
+        "jasmine-test-helpers": "~1.1.2",
+        "tv4": "^1.2.7"
     },
     "dependencies": {
         "bluebird": "^3.4.7",
