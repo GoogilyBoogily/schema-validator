@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+1.0.2 - 2017-02-22
+------------------
+
+* The factory now returns the modified instance of tv4.
+
 
 1.0.1 - 2017-02-22
 ------------------
