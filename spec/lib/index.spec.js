@@ -88,8 +88,8 @@ describe("schema", () => {
         tv4FileLoader = mock.reRequire("../..")(tv4);
     });
     it("correctly attaches the functions", () => {
-        expect(tv4.loadSchemaFileAsync).not.toBeUndefined();
-        expect(tv4.loadSchemaFolderAsync).not.toBeUndefined();
+        expect(tv4.loadSchemaFileAsync).toEqual(jasmine.any(Function));
+        expect(tv4.loadSchemaFolderAsync).toEqual(jasmine.any(Function));
     });
     describe(".loadSchemaFileAsync()", () => {
         it("loads a schema with an ID and validates against it", () => {

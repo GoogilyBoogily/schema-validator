@@ -39,7 +39,7 @@ Alternately you may edit your `package.json` and add this to your `dependencies`
 Functions attached to tv4
 -------------------------
 
-### loadSchemaFileAsync(schemaPath, relativeTo)
+### `loadSchemaFileAsync(schemaPath, relativeTo)`
 
 Loads a schema from a file. Returns an empty promise when it has finished loading the schema.
 
@@ -47,7 +47,7 @@ Loads a schema from a file. Returns an empty promise when it has finished loadin
 - `relativeTo` is the path on the filesystem that `schemaPath` is relative to.
 
 
-### loadSchemaFolderAsync(startPath)
+### `loadSchemaFolderAsync(startPath)`
 
 Loads a directory of schemas. Returns an empty promise when it has finished loading the schemas in the folder.
 
