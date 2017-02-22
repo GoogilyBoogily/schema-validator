@@ -39,7 +39,7 @@ Alternately you may edit your `package.json` and add this to your `dependencies`
 Functions attached to tv4
 -------------------------
 
-### `loadSchemaFileAsync(schemaPath, relativeTo)`
+### `promise = loadSchemaFileAsync(schemaPath, relativeTo)`
 
 Loads a schema from a file. Returns an empty promise when it has finished loading the schema.
 
@@ -47,7 +47,7 @@ Loads a schema from a file. Returns an empty promise when it has finished loadin
 - `relativeTo` is the path on the filesystem that `schemaPath` is relative to.
 
 
-### `loadSchemaFolderAsync(startPath)`
+### `promise = loadSchemaFolderAsync(startPath)`
 
 Loads a directory of schemas. Returns an empty promise when it has finished loading the schemas in the folder.
 
@@ -71,6 +71,12 @@ Voila! Now you have the `loadSchemaFileAsync()` and `loadSchemaFolderAsync()` fu
 
     tv4.loadSchemaFileAsync("./schemas/example-schema.json", ".");
     tv4.loadSchemaFolderAsync("./anotherSchemaFolder/");
+
+Since both function return promises, they are able to be `.then()`ed.
+
+    tv.loadSchemaFolderAsync("./testSchemaFolder/").then(() => {
+        console.log("Yay, our schemas from ./testSchemaFolder/ have been loaded!");
+    });
 
 
 License
