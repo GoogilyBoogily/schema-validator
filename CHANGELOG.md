@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.0.3 - 2017-02-24
+------------------
+
+* Now, before attaching the functions to tv4, we get a fresh tv4 instance (via tv4's `freshApi()` function).
+* Changed the promisifying method (from `promisifyAll()` to `promisify()`), as it wasn't working in some cases.
+
+
 1.0.2 - 2017-02-22
 ------------------
 

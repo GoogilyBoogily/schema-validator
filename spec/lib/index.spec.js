@@ -1,12 +1,11 @@
 "use strict";
 
 describe("schema", () => {
-    var Bluebird, mock, path, tv4;
+    var mock, path, tv4;
 
     beforeEach(() => {
         var fs;
 
-        Bluebird = require("bluebird");
         fs = require("fs");
         mock = require("mock-require");
         path = require("path");
@@ -72,19 +71,19 @@ describe("schema", () => {
 
             callback(new Error(`Invalid file: ${fn.toString()}`));
         });
-        mock("glob", (pattern, options) => {
+        mock("glob", (pattern, options, callback) => {
             expect(pattern).toBe("./folder/**/*.json");
             expect(options).toEqual({
                 strict: true,
                 nodir: true
             });
 
-            return Bluebird.resolve([
+            callback(null, [
                 "/folder/email.json",
                 "/folder/folder/number.json"
             ]);
         });
-        mock.reRequire("../..")(tv4);
+        tv4 = mock.reRequire("../..")(tv4);
     });
     it("correctly attaches the functions", () => {
         expect(tv4.loadSchemaFileAsync).toEqual(jasmine.any(Function));
@@ -120,4 +119,3 @@ describe("schema", () => {
         });
     });
 });
-
