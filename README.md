@@ -69,7 +69,7 @@ Then, require the tv4-file-loader module and pass the newly created tv4 into it.
 
 Voila! Now you have the `loadSchemaFileAsync()` and `loadSchemaFolderAsync()` functions available to you through tv4. You can use them like so:
 
-    tv4.loadSchemaFileAsync("${__dirname}/schemas/example-schema.json", ".");
+    tv4.loadSchemaFileAsync(`${__dirname}/schemas/example-schema.json`, ".");
     tv4.loadSchemaFolderAsync(`${__dirname}/anotherSchemaFolder/`);
 
 Since both function return promises, they are able to be `.then()`ed.
