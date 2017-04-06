@@ -1,6 +1,6 @@
 {
     "name": "tv4-file-loader",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Adds loading schemas from a single file or a directory functionality to the tv4 schema validator.",
     "main": "lib/index.js",
     "scripts": {
@@ -25,6 +25,10 @@
         {
             "name": "Derek Mayer",
             "email": "mayerderekj@gmail.com"
+        },
+        {
+            "name": "Kyle Long",
+            "email": "uilwen@gmail.com"
         }
     ],
     "license": "MIT",
@@ -42,7 +46,6 @@
     },
     "dependencies": {
         "bluebird": "^3.4.7",
-        "glob": "^7.1.0",
-        "mock-require": "^2.0.1"
+        "glob": "^7.1.0"
     }
 }
