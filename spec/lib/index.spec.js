@@ -1,89 +1,35 @@
 "use strict";
 
 describe("schema", () => {
-    var mock, path, tv4;
+    var cwd, invalidSchemaDir, path, process, schemaDir, tv4;
+
+    schemaDir = `${__dirname}/../schema`;
+    invalidSchemaDir = `${__dirname}/../invalid-schema`;
+    path = require("path");
+    process = require("process");
+    cwd = process.cwd();
+
+    /**
+     * This function exists because if there if tv4 cannot find
+     * the schema you try to validate against, it will pass
+     * validation anyway.
+     *
+     * @param {Object} value
+     * @param {Object} schema
+     */
+    function expectValid(value, schema) {
+        var result;
+
+        result = tv4.validateResult(value, schema);
+        expect(result.missing).toEqual([], `Found missing schemas. These schemas exist: ${tv4.getSchemaUris()}`);
+        expect(result.valid).toBe(true);
+    }
 
     beforeEach(() => {
-        var fs;
-
-        fs = require("fs");
-        mock = require("mock-require");
-        path = require("path");
-        spyOn(path, "resolve").and.callThrough();
-        tv4 = require("tv4");
-        spyOn(tv4, "addSchema").and.callThrough();
-        spyOn(fs, "readFile").and.callFake((fn, callback) => {
-            /**
-             * Signify the end of the loading of a file.  If passed a string,
-             * uses that string as a buffer.  If passed an object, first it
-             * converts the object to a JSON string and then passes back the
-             * string as a buffer.
-             *
-             * @param {(string|Object)} obj
-             */
-            function done(obj) {
-                if (typeof obj !== "string") {
-                    obj = JSON.stringify(obj);
-                }
-
-                callback(null, new Buffer(obj, "binary"));
-            }
-
-            if (fn.match("email.json")) {
-                // No id in this file
-                done({
-                    type: "string",
-                    format: "email"
-                });
-
-                return;
-            }
-
-            if (fn.match("number.json")) {
-                // ID in this file
-                done({
-                    id: "/folder/folder/number.json",
-                    type: "number",
-                    minimum: 5
-                });
-
-                return;
-            }
-
-            if (fn.match("email-parse-error.json")) {
-                done("{\"type: \"string\", \"format\": \"email\"}");
-
-                return;
-            }
-
-            if (fn.match("missing-one.json")) {
-                done({
-                    type: "object",
-                    properties: {
-                        a: {
-                            $ref: "/other-schema"
-                        }
-                    }
-                });
-
-                return;
-            }
-
-            callback(new Error(`Invalid file: ${fn.toString()}`));
-        });
-        mock("glob", (pattern, options, callback) => {
-            expect(pattern).toBe("./folder/**/*.json");
-            expect(options).toEqual({
-                strict: true,
-                nodir: true
-            });
-
-            callback(null, [
-                "/folder/email.json",
-                "/folder/folder/number.json"
-            ]);
-        });
-        tv4 = mock.reRequire("../..")(tv4);
+        tv4 = require("../../lib")(require("tv4"));
+    });
+    afterEach(() => {
+        process.chdir(cwd);
     });
     it("correctly attaches the functions", () => {
         expect(tv4.loadSchemaFileAsync).toEqual(jasmine.any(Function));
@@ -91,30 +37,48 @@ describe("schema", () => {
     });
     describe(".loadSchemaFileAsync()", () => {
         it("loads a schema with an ID and validates against it", () => {
-            return tv4.loadSchemaFileAsync("./email.json", "./").then(() => {
-                expect(tv4.validate("someone@example.net", "/email.json")).toBe(true);
+            return tv4.loadSchemaFileAsync(`${schemaDir}/email.json`, schemaDir).then(() => {
+                expectValid("someone@example.net", "/email.json");
             });
         });
         it("loads a schema which cannot be parsed", () => {
-            return tv4.loadSchemaFileAsync("./email-parse-error.json", "./").then(jasmine.fail, (err) => {
-                expect(err.toString()).toContain("Unable to parse file: ./email-parse-error.json");
+            var schemaPath;
+
+            schemaPath = `${invalidSchemaDir}/email-parse-error.json}`;
+
+            return tv4.loadSchemaFileAsync(schemaPath, schemaDir).then(jasmine.fail, (err) => {
+                expect(err.toString()).toContain(`Unable to parse file: ${path.normalize(schemaPath)}`);
             });
         });
         it("tries to load a schema which is not present", () => {
-            return tv4.loadSchemaFileAsync("./email-not-there.json", "./").then(jasmine.fail, (err) => {
-                expect(err.toString()).toContain("Unable to parse file: ./email-not-there.json");
+            var schemaPath;
+
+            schemaPath = `${schemaDir}/email-not-there.json`;
+
+            return tv4.loadSchemaFileAsync(schemaPath, schemaDir).then(jasmine.fail, (err) => {
+                expect(err.toString()).toContain(`Unable to parse file: ${path.normalize(schemaPath)}`);
+            });
+        });
+        it("can load a relative path", () => {
+            process.chdir(schemaDir);
+
+            return tv4.loadSchemaFileAsync("email.json", ".").then(() => {
+                expectValid("someone@example.net", "/email.json");
+            });
+        });
+        it("can load without a relativeTo", () => {
+            process.chdir(schemaDir);
+
+            return tv4.loadSchemaFileAsync("email.json").then(() => {
+                expectValid("someone@example.net", "/email.json");
             });
         });
     });
     describe(".loadSchemaFolderAsync()", () => {
         it("loads schemas in folder and validates against them", () => {
-            path.resolve.and.callFake((a, b) => {
-                return a + b;
-            });
-
-            return tv4.loadSchemaFolderAsync("./folder/").then(() => {
-                expect(tv4.validate("someone@example.net", "/folder/email.json")).toBe(true);
-                expect(tv4.validate(5, "/folder/folder/number.json")).toBe(true);
+            return tv4.loadSchemaFolderAsync(schemaDir).then(() => {
+                expectValid("someone@example.net", "/email.json");
+                expectValid(5, "/number.json");
             });
         });
     });

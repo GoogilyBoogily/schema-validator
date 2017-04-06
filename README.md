@@ -44,7 +44,7 @@ Functions attached to tv4
 Loads a schema from a file. Returns an empty promise when it has finished loading the schema.
 
 - `schemaPath` is the path to the desired schema on the filesystem.
-- `relativeTo` is the path on the filesystem that `schemaPath` is relative to.
+- `relativeTo` this property is used to create the schema name. For example if your schema was in `my-schemas/hello.json` but you wanted to reference it as `hello.json` you could pass `relativeTo as `my-schemas`.
 
 
 ### `promise = loadSchemaFolderAsync(startPath)`
@@ -69,8 +69,8 @@ Then, require the tv4-file-loader module and pass the newly created tv4 into it.
 
 Voila! Now you have the `loadSchemaFileAsync()` and `loadSchemaFolderAsync()` functions available to you through tv4. You can use them like so:
 
-    tv4.loadSchemaFileAsync("./schemas/example-schema.json", ".");
-    tv4.loadSchemaFolderAsync("./anotherSchemaFolder/");
+    tv4.loadSchemaFileAsync(`${__dirname}/schemas/example-schema.json`, ".");
+    tv4.loadSchemaFolderAsync(`${__dirname}/anotherSchemaFolder/`);
 
 Since both function return promises, they are able to be `.then()`ed.
 
